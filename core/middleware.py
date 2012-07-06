@@ -31,6 +31,7 @@ from gobject import timeout_add_seconds, source_remove
 from math import floor
 from time import time
 from twisted.python import log
+from twisted.python.failure import Failure
 from twisted.internet import defer, reactor, task
 
 import wader.common.aterrors as E
@@ -968,7 +969,7 @@ class WCDMAWrapper(WCDMAProtocol):
                     sms.where = int(rawsms.group('where'))
                     sms_list.append(sms)
                 except ValueError:
-                    log.err(ex.MalformedSMSError,
+                    log.err(Failure(exc_type=ex.MalformedSMSError),
                             "Malformed PDU: %s" % rawsms.group('pdu'))
             return sms_list
 
